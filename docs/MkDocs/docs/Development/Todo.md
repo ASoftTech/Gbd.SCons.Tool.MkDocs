@@ -1,5 +1,8 @@
 # TODO
 
+  * document switch to developer scons scons-3.1.0.alpha.yyyymmdd in virtual env
+
+
 ## Development
 
   * add coverage command to sconscript
