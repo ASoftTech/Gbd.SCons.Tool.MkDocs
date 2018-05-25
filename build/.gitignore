@@ -1,0 +1,7 @@
+# Ignore python virtual environment directory
+py36dev/
+py27dev/
+docs/
+
+scons/
+virtualenv_py3/

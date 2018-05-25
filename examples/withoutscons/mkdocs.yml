@@ -1,0 +1,36 @@
+site_name: Gtk3-Sharp-Core
+site_url: http://ASoftTech.github.io/Gtk3-Sharp-Core
+repo_url: https://github.com/ASoftTech/Gtk3-Sharp-Core
+site_description: GtkSharp3 Core - Gtk3 bindings for C# .Net Core
+edit_uri: edit/master/Docs/MkDocs/Docs
+
+pages:
+- Home: index.md
+
+- Header1:
+    - Test Page1: Header1\Test-Page1.md
+    - Test Page2: Header1\Test-Page2.md
+
+- Header2:
+    - Test Page1: Header2\Test-Page3.md
+    - Test Page2: Header2\Test-Page4.md
+    - SubHeader2-1:
+        - Test Page 5: Header2\Test-Page5.md
+
+#theme: cosmo
+theme: cyborg
+#theme: alabaster
+#theme: readthedocs
+#theme: mkdocs
+#theme: material
+
+# Overrides content within the selected theme
+theme_dir: theme
+
+markdown_extensions:
+    - smarty
+
+extra_css:
+    - css/highlight-fix.css
+    - css/highlight-custom.css
+    - css/navbarfix.css

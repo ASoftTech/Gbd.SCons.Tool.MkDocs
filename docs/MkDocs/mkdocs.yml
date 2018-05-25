@@ -1,0 +1,34 @@
+site_name: Scons.Gbd.Docs
+site_url: http://ASoftTech.github.io/Scons.Gbd.Docs
+repo_url: https://github.com/ASoftTech/Scons.Gbd.Docs
+site_description: Scons.Gbd.Docs - scons related tools for documentation
+edit_uri: edit/master/docs/MkDocs/docs
+
+pages:
+- Home: index.md
+
+- Builders:
+    - Mkdocs:
+        - MkDocs Builder: Builders\Mkdocs\MkdocsBuild.md
+        - MkDocs Combiner: Builders\Mkdocs\MkdocsCombiner.md
+        - MkDocs Json Builder: Builders\Mkdocs\MkdocsJsonbuild.md
+        - MkDocs Publish: Builders\Mkdocs\MkdocsPublish.md
+        - MkDocs Server: Builders\Mkdocs\MkdocsServer.md
+
+#theme: cosmo
+theme: cyborg
+#theme: alabaster
+#theme: readthedocs
+#theme: mkdocs
+#theme: material
+
+# Overrides content within the selected theme
+theme_dir: theme
+
+markdown_extensions:
+    - smarty
+
+extra_css:
+    - css/highlight-fix.css
+    - css/highlight-custom.css
+    - css/navbarfix.css

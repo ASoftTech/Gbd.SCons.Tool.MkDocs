@@ -1,0 +1,75 @@
+"""
+Configuration class for Mkdocs Combiner
+"""
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
+
+import SCons.Script
+from SCons.Environment import Environment
+
+
+class MkdocsCombineConfig:
+
+    def __init__(self, env):
+        self.env = env
+
+{# All Passthrough properties #}
+{% set envprefix = "Mkdocs_Combine_" %}
+{% set propertylist = [
+    ("# File options"),
+    ("Exe", "'mkdocscombine'", "Represents the mkdocs combine executable."),
+    ("WorkingDir", "env.Dir('.')", "Working directory (current directory by default)."),
+    ("Encoding", "None", "Encoding for input files (default: utf-8)."),
+    ("Exclude", "None", "Include files to skip (default: none)."),
+    ("OutputHtml", "False", "If to output a single html page instead of markdown."),
+    ("# Structure options"),
+    ("Meta", "None", "If to keep YAML metadata (default), False = strip YAML metadata."),
+    ("Titles", "None", "Add titles from mkdocs.yml to Markdown files (default).
+        False = do not add titles to Markdown files."),
+    ("Uplevels", "None", "Increase ATX header levels in Markdown files (default).
+        False = do not increase ATX header levels in Markdown files."),
+    ("# Table options"),
+    ("PandocTables", "None", "True = keep original Markdown tables (default).
+        False = combine Markdown tables to Pandoc-style grid tables."),
+    ("TableWidth", "None", "Width of generated grid tables in characters (default: 100)."),
+    ("# Link options"),
+    ("Refs", "None", "True = keep MkDocs-style cross-references.
+        False = replace MkDocs-style cross-references by just their title (default)."),
+    ("Anchors", "None", "True = keep HTML anchor tags. False = strip out HTML anchor tags (default)."),
+    ("# Extra options"),
+    ("MathLatex", "None", "True = combine the \( \) Markdown math into LaTeX $$ inlines.
+        False = keep \( \) Markdown math notation as is (default)."),
+    ("ImageExt", "None", "Extension to substitute image extensions by (default: no replacement)."),
+    ("ExtraArgs", "[]", "Additional Arguments."),
+] -%}
+
+{# Generate all pass through properties with no special logic #}
+{% for item in propertylist %}
+    {% if item|length == 3 %}
+    @property
+    def {{ item[0] }}(self):
+        """{{ item[2] }}"""
+        return self.env['{{ envprefix + item[0] }}']
+
+    @{{ item[0] }}.setter
+    def {{ item[0] }}(self, value):
+        self.env['{{ envprefix + item[0] }}'] = value
+
+    {% else %}
+    {{ item }}
+
+    {% endif %}
+{% endfor %}
+    def set_defaults(self):
+        """Set the default options"""
+        env.SetDefault(
+        {# Set default values #}
+        {% for item in propertylist %}
+            {% if item|length == 3 %}
+            {{ envprefix + item[0] }}={{ item[1] }},
+            {% else %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+        )
+

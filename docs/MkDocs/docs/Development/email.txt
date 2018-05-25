@@ -1,0 +1,98 @@
+Hi,
+I've recently been looking into writing some of my own tools for scons.
+Part of the problem at the moment is that scons doesn't have plugin support.
+
+There's around 3 different ways to include / use tools outside of scons as far as I can see
+
+
+## PyPackageDir
+
+Back during the 3.0 release I added in a function called PyPackageDir
+This just reports back the directory on the system for a given python module
+
+With this we can do the following
+```
+toolpaths = [PyPackageDir('example_pip_package')]
+tools = ['Namespace.ExampleTool']
+env = Environment(ENV=os.environ, tools=tools, toolpath=toolpaths)
+tgt = env.ExampleTool()
+```
+But this still requires manually modifying the toolpath within the SConstript
+
+## BuilderBase
+
+A second method I've disovered is the use of the BuilderBase class
+Yasha seems to use this method
+
+  * https://github.com/kblomqvist/yasha
+  * https://github.com/kblomqvist/yasha/blob/master/yasha/scons.py
+
+However I'm not sure if this is a supported way of creating tools outside of Scons
+any thoughts on this?
+Should this be documented as an acceptable way of extending scons?
+
+## Entry_Points plugin
+
+Finally I've been working on a proof of concept way of adding plugin support
+This is similar to the way mkdocs handles things via the use of setup entry_points
+https://stackoverflow.com/questions/774824/explain-python-entry-points
+
+The advantages of this method is that it allows for tools to be registered with scons
+without the need for modifying the SConstruct file.
+so potentially if you wanted to, you could move some of the existing tools to seperate repositories and maintain backwards compatibility in theory.
+Which might make the main repo a bit less cluttered.
+
+### Examples
+
+This is an example of a repo that implements it
+```
+# https://github.com/ASoftTech/Scons.Gbd.Docs.git
+pip install git+https://github.com/ASoftTech/Scons.Gbd.Docs.git
+```
+
+The scons version with the changes added in for entry_points is here
+https://github.com/grbd/scons.git
+
+
+### How it works
+
+I've not added in any documentation for this yet so as a rough walkthrough as to how this works
+
+  * The plugin lists a python package / class within setup.py
+
+```
+    entry_points={
+        'scons.plugins': [
+            'scons_gbd_docs=scons_gbd_docs.plugin:GbdDocTools',
+        ]
+    }
+ ```
+
+ This class GbdDocTools inherits from a SconsBasePlugin class, and provides a simple function that register's it's namespace with scons
+ if scons goes looking for it.
+
+Within scons there's now a new module scons/src/engine/SCons/Plugin.py
+This contains the base class, and some code called during startup of scons to load in / search for any available plugins (only tools at this point)
+When the user provides a tool name or namespace group of tools (in this case e.g. Gbd.Docs.Mkdocs or Gbd.Docs.Mkdocs.MkdocsBuild
+Scons searches the provided toolpath first, then the plugins second, followed by the inbuilt tools third.
+
+I think in theory you could move some of the existing tools into plugins while retaining they're original namespace
+such as D or MS related tools for example.
+
+### Testing
+
+Since I'm using pytest for my own tools, I also placed a slightly modified version of the test code scons uses into 
+tests/pytest_scons
+One thought if plugins went ahead in the future would be to move the existing test framework code for scons into it's own repo perhaps.
+
+
+### Next steps
+
+The next step would be for me to try and write some docs for the user manual / man pages to describe this
+but I figured I'd better check if this implementation is okay first before doing that / trying a pull request
+also if perhaps I should try to document the use of BuilderBase (method 2) at the same time as an extensibility option.
+
+Any thoughts / feedback?
+
+Many Thanks
+Richard

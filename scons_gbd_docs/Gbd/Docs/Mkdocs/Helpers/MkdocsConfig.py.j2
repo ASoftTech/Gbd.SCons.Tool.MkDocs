@@ -1,0 +1,97 @@
+"""
+Configuration class for Mkdocs
+"""
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
+
+import SCons.Script
+from SCons.Environment import Environment
+
+
+class MkdocsConfig:
+
+    def __init__(self, env):
+        self.env = env
+        self.yamlcfg = None
+
+{# All Passthrough properties #}
+{% set envprefix = "Mkdocs_" %}
+{% set propertylist = [
+    ("Exe", "'mkdocs'", "Represents the mkdocs executable."),
+    ("WorkingDir", "env.Dir('.')",  "Working directory (current directory by default)."),
+    ("CleanBuild", "None",  "If to Remove old files from the site_dir before building (the default)."),
+    ("Strict", "False",  "If to enable Strict mode."),
+    ("Theme", "None",  "Which theme to use."),
+    ("ThemeDir", "None",  "Directory of additional files to merge in with the theme."),
+    ("RemoteBranch", "None",  "If to override the default remote branch setting when uploading."),
+    ("RemoteName", "None",  "If to override the default remote name setting when uploading."),
+    ("ForcePush", "False",  "If to force the push to github."),
+    ("ServeUrl", "None",  "Default is '127.0.0.1:8000'."),
+    ("LiveReload", "None",  "If to use livereload, enabled by default.
+           When pages change on the file system the browser auto refreshes to show the changes"),
+    ("DirtyReload", "False",  "Enable the live reloading in the development server.
+           But only re-build files that have changed"),
+    ("Quiet", "False",  "If to silence warnings."),
+    ("Verbose", "False",  "Show verbose messages."),
+    ("ExcludeDirs", "[]",  "Directories to exclude for the scanner."),
+    ("ExtraArgs", "[]",  "Additional Arguments."),
+] -%}
+
+{# Generate all pass through properties with no special logic #}
+{% for item in propertylist %}
+    {% if item|length == 3 %}
+    @property
+    def {{ item[0] }}(self):
+        """{{ item[2] }}"""
+        return self.env['{{ envprefix + item[0] }}']
+
+    @{{ item[0] }}.setter
+    def {{ item[0] }}(self, value):
+        self.env['{{ envprefix + item[0] }}'] = value
+
+    {% else %}
+    {{ item }}
+
+    {% endif %}
+{% endfor %}
+    @property
+    def SiteDir(self):
+        """Directory to output the build to - default is 'site'."""
+        if self.env['Mkdocs_SiteDir']:
+            return Dir(self.env['Mkdocs_SiteDir'])
+        elif 'site_dir' in self.yamlcfg:
+            return Dir(self.yamlcfg['site_dir'])
+        else:
+            return Dir('site')
+
+    @SiteDir.setter
+    def SiteDir(self, value):
+        self.env['Mkdocs_SiteDir'] = value
+
+    @property
+    def DocsDir(self):
+        """doc Source directory, can only be set in the yaml config file."""
+        if 'docs_dir' in self.yamlcfg:
+            docsdirnode = Dir(self.yamlcfg['docs_dir'])
+        else:
+            docsdirnode = Dir('docs')
+        return docsdirnode
+
+    def read_cfg(self, cfgfile):
+        """Read the mkdocs yaml configuration file"""
+        with open(str(cfgfile), 'r') as stream:
+            self.yamlcfg = yaml.load(stream)
+
+    def set_defaults(self):
+        """Set the default options"""
+        env.SetDefault(
+        {# Set default values #}
+        {% for item in propertylist %}
+            {% if item|length == 3 %}
+            {{ envprefix + item[0] }}={{ item[1] }},
+            {% else %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+        )
+
