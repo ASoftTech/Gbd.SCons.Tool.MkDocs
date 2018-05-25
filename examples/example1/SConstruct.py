@@ -11,7 +11,6 @@ from SCons.Environment import Environment
 from scons_gbd_docs.Gbd.Docs.Mkdocs.Helpers.MkdocsConfig import MkdocsConfig
 
 
-
 def main():
 
     # TODO
@@ -44,7 +43,6 @@ def main():
     else:
         print_useage(env)
         Exit(1)
-
 
     # Check the command given
     if cmd == 'serve':
@@ -128,7 +126,6 @@ def setup_opts(env):
 
     #cfg.CleanBuild = True
     cfg.Theme = "cyborg"
-
 
     #env.Replace(Mkdocs_ExcludeDirs = ["doxygen"])
     #env.Replace(Mkdocs_Theme = "cyborg")
