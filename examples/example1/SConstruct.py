@@ -5,10 +5,9 @@ import sys
 import subprocess
 import shutil
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
-from scons_gbd_docs.Gbd.Docs.Mkdocs.Helpers.MkdocsConfig import MkdocsConfig
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsConfig import MkdocsConfig
 
 
 def main():
@@ -32,7 +31,7 @@ def main():
     # Use pip installed production
     #toolpaths = [PyPackageDir('scons_gbd_docs')]
 
-    tools = ['Gbd.Docs.Mkdocs.MkdocsBuild']
+    tools = ['Gbd.Docs.Mkdocs']
 
     env = Environment(ENV=os.environ, tools=tools, toolpath=toolpaths)
     setup_opts(env)
@@ -67,10 +66,6 @@ def main():
 
     # Alternative Formats
 
-    elif cmd == 'json':
-        tgt = env.MkdocsJsonBuild()
-        Default(tgt)
-
     elif cmd == 'mkcombine':
         tgt = env.MkdocsCombiner()
         Default(tgt)
@@ -99,7 +94,6 @@ def print_useage(env):
     print("  clean         to clean the output directory")
 
     print("Alternative Formats:")
-    print("  json          to build the docs as JSON files")
     print("  mkcombine     to build the docs as a combined markdown file")
 
     # TODO

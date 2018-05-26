@@ -165,10 +165,10 @@ class MkdocsCombineConfig:
 
     def set_defaults(self):
         """Set the default options"""
-        env.SetDefault(
+        self.env.SetDefault(
             # File options
             Mkdocs_Combine_Exe='mkdocscombine',
-            Mkdocs_Combine_WorkingDir=env.Dir('.'),
+            Mkdocs_Combine_WorkingDir=self.env.Dir('.'),
             Mkdocs_Combine_Encoding=None,
             Mkdocs_Combine_Exclude=None,
             Mkdocs_Combine_OutputHtml=False,

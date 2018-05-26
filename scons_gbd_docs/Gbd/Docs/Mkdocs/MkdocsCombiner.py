@@ -5,16 +5,15 @@ which can then be used with pandoc to generate a pdf or other forms of documenta
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 
 import os
 import sys
 import os.path as path
-from .Helpers import MkdocsCommon
-from .Helpers import MkdocsCombineCommon
-from .Helpers.MkdocsCombineConfig import MkdocsCombineConfig
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common import MkdocsCommon
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common import MkdocsCombineCommon
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsCombineConfig import MkdocsCombineConfig
 from SCons.Script import Builder
 
 
@@ -28,6 +27,7 @@ def generate(env):
     assert(exists(env))
     if 'Mkdocs_CombineConfig' not in env:
         env['Mkdocs_CombineConfig'] = MkdocsCombineConfig(env)
+    env['Mkdocs_CombineConfig'].set_defaults()
 
     scanner = env.Scanner(
         MkdocsCommon.scanner,
@@ -43,7 +43,7 @@ def generate(env):
 
 def __Combiner_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
-    cmdopts = ['$Mkdocs_Combine']
+    cmdopts = ['$Mkdocs_Combine_Exe']
     cmdopts.append('--config-file=' + str(source[0]))
 
     cfg = env['Mkdocs_CombineConfig']

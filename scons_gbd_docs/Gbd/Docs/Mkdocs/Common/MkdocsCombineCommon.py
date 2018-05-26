@@ -4,18 +4,24 @@ Common code associated with mkdocs combine utility
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
+
+import os.path as path
+from SCons.Script import File, Dir
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsConfig import MkdocsConfig
 
 
 def detect(env):
     """Detect if mkdocscombine exe is detected on the system
        or use user specified option"""
-    if 'Mkdocs_Combine' in env:
-        return env.Detect(env['Mkdocs_Combine'])
+    if 'Mkdocs_Combine_Exe' in env:
+        ret = env.Detect(env['Mkdocs_Combine_Exe'])
     else:
-        return env.Detect('mkdocscombine')
+        ret = env.Detect('mkdocscombine')
+    if ret is None:
+        print("mkdocscombine not found")
+    return ret
 
 
 def emitter(target, source, env):
@@ -26,8 +32,10 @@ def emitter(target, source, env):
     else:
         cfgfile = source[0]
     # Read mkdocs config
-    yamlcfg, sitedirnode, docsdirnode = Mkdocs_Readconfig(cfgfile, env)
+    mkcfg = MkdocsConfig(env)
+    mkcfg.read_cfg(cfgfile)
+
     # Default target
-    if not target:
-        target = File(path.join(str(sitedirnode), 'export/mkdocs.pd'))
+    filenode = File(path.join(str(mkcfg.SiteDir), 'export/mkdocs.pd'))
+    target.append(filenode)
     return target, source

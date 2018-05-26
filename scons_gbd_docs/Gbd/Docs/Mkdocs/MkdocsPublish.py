@@ -4,15 +4,14 @@ This tool will publish the mkdocs content to a github pages destination
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 
 import os
 import sys
 import os.path as path
-from .Helpers import MkdocsCommon
-from .Helpers.MkdocsConfig import MkdocsConfig
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common import MkdocsCommon
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsConfig import MkdocsConfig
 from SCons.Script import Builder
 
 # If you ever want to remove the remote published branch you can use
@@ -29,6 +28,7 @@ def generate(env):
     assert(exists(env))
     if 'Mkdocs_Config' not in env:
         env['Mkdocs_Config'] = MkdocsConfig(env)
+    env['Mkdocs_Config'].set_defaults()
 
     scanner = env.Scanner(
         MkdocsCommon.scanner,
@@ -51,7 +51,7 @@ def MkdocsPublish(env, commitmsg, target=None, source=None):
 
 def __Publish_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
-    cmdopts = ['$Mkdocs', 'gh-deploy']
+    cmdopts = ['$Mkdocs_Exe', 'gh-deploy']
     cmdopts.append('--config-file=' + str(source[0]))
 
     cfg = env['Mkdocs_Config']

@@ -21,22 +21,22 @@ class MkdocsConfig:
 {% set propertylist = [
     ("Exe", "'mkdocs'", "Represents the mkdocs executable."),
     ("WorkingDir", "self.env.Dir('.')",  "Working directory (current directory by default)."),
-    ("CleanBuild", "None",  "If to Remove old files from the site_dir before building (the default)."),
-    ("Strict", "False",  "If to enable Strict mode."),
-    ("Theme", "None",  "Which theme to use."),
-    ("ThemeDir", "None",  "Directory of additional files to merge in with the theme."),
-    ("RemoteBranch", "None",  "If to override the default remote branch setting when uploading."),
-    ("RemoteName", "None",  "If to override the default remote name setting when uploading."),
-    ("ForcePush", "False",  "If to force the push to github."),
-    ("ServeUrl", "None",  "Default is '127.0.0.1:8000'."),
-    ("LiveReload", "None",  "If to use livereload, enabled by default.
+    ("CleanBuild", "None", "If to Remove old files from the site_dir before building (the default)."),
+    ("Strict", "False", "If to enable Strict mode."),
+    ("Theme", "None", "Which theme to use."),
+    ("ThemeDir", "None", "Directory of additional files to merge in with the theme."),
+    ("RemoteBranch", "None", "If to override the default remote branch setting when uploading."),
+    ("RemoteName", "None", "If to override the default remote name setting when uploading."),
+    ("ForcePush", "False", "If to force the push to github."),
+    ("ServeUrl", "None", "Default is '127.0.0.1:8000'."),
+    ("LiveReload", "None", "If to use livereload, enabled by default.
            When pages change on the file system the browser auto refreshes to show the changes"),
-    ("DirtyReload", "False",  "Enable the live reloading in the development server.
+    ("DirtyReload", "False", "Enable the live reloading in the development server.
            But only re-build files that have changed"),
-    ("Quiet", "False",  "If to silence warnings."),
-    ("Verbose", "False",  "Show verbose messages."),
-    ("ExcludeDirs", "[]",  "Directories to exclude for the scanner."),
-    ("ExtraArgs", "[]",  "Additional Arguments."),
+    ("Quiet", "False", "If to silence warnings."),
+    ("Verbose", "False", "Show verbose messages."),
+    ("ExcludeDirs", "[]", "Directories to exclude for the scanner."),
+    ("ExtraArgs", "[]", "Additional Arguments."),
 ] -%}
 
 {# Generate all pass through properties with no special logic #}

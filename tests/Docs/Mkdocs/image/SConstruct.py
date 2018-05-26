@@ -5,7 +5,6 @@ import sys
 import subprocess
 import shutil
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 

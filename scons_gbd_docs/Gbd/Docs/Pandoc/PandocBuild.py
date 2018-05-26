@@ -4,7 +4,6 @@
     For example converting markdown files to a pdf
 """
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 

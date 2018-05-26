@@ -3,7 +3,6 @@
     Common code associated with pandoc builders
 """
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 

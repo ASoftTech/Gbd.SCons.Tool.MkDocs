@@ -5,15 +5,14 @@ using markdown files as an input via mkdocs to an output directory
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 
 import os
 import sys
 import os.path as path
-from .Helpers import MkdocsCommon
-from scons_gbd_docs.Gbd.Docs.Mkdocs.Helpers.MkdocsConfig import MkdocsConfig
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common import MkdocsCommon
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsConfig import MkdocsConfig
 from SCons.Script import Builder
 
 

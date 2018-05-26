@@ -18,7 +18,7 @@ class MkdocsCombineConfig:
 {% set propertylist = [
     ("# File options"),
     ("Exe", "'mkdocscombine'", "Represents the mkdocs combine executable."),
-    ("WorkingDir", "env.Dir('.')", "Working directory (current directory by default)."),
+    ("WorkingDir", "self.env.Dir('.')", "Working directory (current directory by default)."),
     ("Encoding", "None", "Encoding for input files (default: utf-8)."),
     ("Exclude", "None", "Include files to skip (default: none)."),
     ("OutputHtml", "False", "If to output a single html page instead of markdown."),
@@ -62,7 +62,7 @@ class MkdocsCombineConfig:
 {% endfor %}
     def set_defaults(self):
         """Set the default options"""
-        env.SetDefault(
+        self.env.SetDefault(
         {# Set default values #}
         {% for item in propertylist %}
             {% if item|length == 3 %}

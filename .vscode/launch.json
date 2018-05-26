@@ -29,7 +29,7 @@
                 // make sure we use mkdocs from the virtual environment
                 "PATH" : "${workspaceFolder}/build/py36dev/Scripts"
             },
-            "args": ["build"],
+            "args": ["mkcombine"],
         },
         
     ]

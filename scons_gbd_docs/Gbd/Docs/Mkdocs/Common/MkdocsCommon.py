@@ -4,7 +4,6 @@ Common code associated with mkdocs builders
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
 
-# These import lines not required, but it helps intellisense within VStudio
 import SCons.Script
 from SCons.Environment import Environment
 
@@ -12,14 +11,14 @@ import os
 import sys
 import os.path as path
 from SCons.Script import File, Dir
-from scons_gbd_docs.Gbd.Docs.Mkdocs.Helpers.MkdocsConfig import MkdocsConfig
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Common.MkdocsConfig import MkdocsConfig
 
 
 def detect(env):
     """Detect if mkdocs exe is detected on the system
        or use user specified option"""
-    if 'Mkdocs' in env:
-        ret = env.Detect(env['Mkdocs'])
+    if 'Mkdocs_Exe' in env:
+        ret = env.Detect(env['Mkdocs_Exe'])
     else:
         ret = env.Detect('mkdocs')
     if ret is None:
