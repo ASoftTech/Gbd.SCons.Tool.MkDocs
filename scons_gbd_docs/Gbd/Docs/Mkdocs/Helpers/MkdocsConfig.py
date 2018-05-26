@@ -7,6 +7,8 @@ from __future__ import (division, print_function,
 import SCons.Script
 from SCons.Environment import Environment
 
+import yaml
+
 
 class MkdocsConfig:
 
@@ -163,12 +165,12 @@ class MkdocsConfig:
     @property
     def SiteDir(self):
         """Directory to output the build to - default is 'site'."""
-        if self.env['Mkdocs_SiteDir']:
-            return Dir(self.env['Mkdocs_SiteDir'])
+        if 'Mkdocs_SiteDir' in self.env:
+            return self.env.Dir(self.env['Mkdocs_SiteDir'])
         elif 'site_dir' in self.yamlcfg:
-            return Dir(self.yamlcfg['site_dir'])
+            return self.env.Dir(self.yamlcfg['site_dir'])
         else:
-            return Dir('site')
+            return self.env.Dir('site')
 
     @SiteDir.setter
     def SiteDir(self, value):
@@ -178,21 +180,22 @@ class MkdocsConfig:
     def DocsDir(self):
         """doc Source directory, can only be set in the yaml config file."""
         if 'docs_dir' in self.yamlcfg:
-            docsdirnode = Dir(self.yamlcfg['docs_dir'])
+            docsdirnode = self.env.Dir(self.yamlcfg['docs_dir'])
         else:
-            docsdirnode = Dir('docs')
+            docsdirnode = self.env.Dir('docs')
         return docsdirnode
 
     def read_cfg(self, cfgfile):
         """Read the mkdocs yaml configuration file"""
         with open(str(cfgfile), 'r') as stream:
             self.yamlcfg = yaml.load(stream)
+        return self.yamlcfg
 
     def set_defaults(self):
         """Set the default options"""
-        env.SetDefault(
+        self.env.SetDefault(
             Mkdocs_Exe='mkdocs',
-            Mkdocs_WorkingDir=env.Dir('.'),
+            Mkdocs_WorkingDir=self.env.Dir('.'),
             Mkdocs_CleanBuild=None,
             Mkdocs_Strict=False,
             Mkdocs_Theme=None,

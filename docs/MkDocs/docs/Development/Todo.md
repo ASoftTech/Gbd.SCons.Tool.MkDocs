@@ -7,7 +7,6 @@
 
   * add coverage command to sconscript
   * https://coverage.readthedocs.io/en/coverage-4.5.1/
-  * switch between py virtual envs in vscode settings?
 
 
 ## Testing
@@ -20,3 +19,9 @@
 
   * test scripts under linux
 
+
+## Look at later on
+
+  * switch between py virtual envs in vscode settings?
+  * is there a way to list tasks in a treeview in vscode?
+  * remove SConstruct files once scons is released that supports SConstruct.py

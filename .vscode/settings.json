@@ -5,7 +5,7 @@
     "python.venvPath": "${workspaceFolder}/build",
     // Additional autocompletion search directories
     "python.autoComplete.extraPaths": [
-        "${workspaceFolder}/build/py36dev/Lib/site-packages/scons-3.1.0.alpha.yyyymmdd",
+        "${workspaceFolder}/build/py36dev/Lib/site-packages/scons-3.0.1",
         "${workspaceFolder}/"
     ],
 

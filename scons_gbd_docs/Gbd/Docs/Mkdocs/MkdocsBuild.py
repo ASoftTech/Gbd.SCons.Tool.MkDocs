@@ -27,6 +27,7 @@ def generate(env):
     assert(exists(env))
     if 'Mkdocs_Config' not in env:
         env['Mkdocs_Config'] = MkdocsConfig(env)
+    env['Mkdocs_Config'].set_defaults()
 
     scanner = env.Scanner(
         MkdocsCommon.scanner,
@@ -42,7 +43,7 @@ def generate(env):
 
 def __Build_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
-    cmdopts = ['$Mkdocs', 'build']
+    cmdopts = ['$Mkdocs_Exe', 'build']
     cmdopts.append('--config-file=' + str(source[0]))
 
     cfg = env['Mkdocs_Config']
@@ -58,7 +59,7 @@ def __Build_func(target, source, env):
         cmdopts.append('--theme=$Mkdocs_Theme')
     if cfg.ThemeDir:
         cmdopts.append('--theme-dir=$Mkdocs_ThemeDir')
-    if cfg.SiteDir:
+    if 'Mkdocs_SiteDir' in env:
         cmdopts.append('--site-dir=$Mkdocs_SiteDir')
     if cfg.Quiet:
         cmdopts.append('--quiet')

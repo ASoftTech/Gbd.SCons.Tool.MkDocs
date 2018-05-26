@@ -11,17 +11,20 @@ from SCons.Environment import Environment
 import os
 import sys
 import os.path as path
-import yaml
 from SCons.Script import File, Dir
+from scons_gbd_docs.Gbd.Docs.Mkdocs.Helpers.MkdocsConfig import MkdocsConfig
 
 
 def detect(env):
     """Detect if mkdocs exe is detected on the system
        or use user specified option"""
     if 'Mkdocs' in env:
-        return env.Detect(env['Mkdocs'])
+        ret = env.Detect(env['Mkdocs'])
     else:
-        return env.Detect('mkdocs')
+        ret = env.Detect('mkdocs')
+    if ret is None:
+        print("mkdocs not found")
+    return ret
 
 
 def scanner(node, env, path, arg=None):
@@ -37,12 +40,15 @@ def scanner(node, env, path, arg=None):
         A list of files.
     """
     # Read mkdocs config
-    yamlcfg, sitedirnode, docsdirnode = Mkdocs_Readconfig(node, env)
+    cfg = env['Mkdocs_Config']
+    assert isinstance(cfg, MkdocsConfig)
+
     # Look at the docs source directory
-    searchpath = env.subst(docsdirnode.abspath)
+    searchpath = env.subst(cfg.DocsDir.abspath)
 
     # Search patterns to exclude
     excludedirs_full = []
+
     for excludeitem in env['Mkdocs_ExcludeDirs']:
         excludedirs_full.append(os.path.join(searchpath, excludeitem))
 
@@ -64,10 +70,14 @@ def emitter(target, source, env):
     else:
         cfgfile = source[0]
     # Read mkdocs config
-    yamlcfg, sitedirnode, docsdirnode = Mkdocs_Readconfig(cfgfile, env)
+
+    cfg = env['Mkdocs_Config']
+    assert isinstance(cfg, MkdocsConfig)
+    cfg.read_cfg(cfgfile)
+
     # We need at least one target that's a file for the rebuild
-    # if source changes logic to work
-    filenode = File(path.join(str(sitedirnode), 'mkdocs/search_index.json'))
+    # for source changes logic to work in scons
+    filenode = File(path.join(str(cfg.SiteDir), 'mkdocs/search_index.json'))
     target.append(filenode)
-    env.Clean(target, sitedirnode)
+    env.Clean(target, cfg.SiteDir)
     return target, source
