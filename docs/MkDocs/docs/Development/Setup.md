@@ -1,6 +1,5 @@
 # Setup
 
-
 ## setup.py / setup.cfg
 
   * setup.py - python script used during installation / to add metadata for pip

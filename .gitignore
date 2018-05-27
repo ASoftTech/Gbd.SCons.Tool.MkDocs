@@ -100,3 +100,5 @@ venv.bak/
 # scons files
 .sconsign.dblite
 /.vscode/temp
+
+/docs/MkDocs/docs/Development/email.txt

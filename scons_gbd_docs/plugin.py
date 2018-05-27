@@ -8,13 +8,12 @@ from __future__ import (division, print_function,
 from Scons.Plugins import BasePlugin
 
 
-class GbdDocTools(SconsBasePlugin):
+class scons_gbd_docs(SconsBasePlugin):
 
     def get_metadata(self):
         """return metadata associated with the plugin"""
         self.metadata = {
             'name' = 'scons_gbd_docs',
-            'api' = '1.0.0',
             'description' = 'Documentation tools for use with SCons, e.g. MkDocs, Doxygen',
             'author' = 'grbd'}
         return self.metadata

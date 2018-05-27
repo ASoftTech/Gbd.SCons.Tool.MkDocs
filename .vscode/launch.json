@@ -26,7 +26,7 @@
                 "SCONS_LIB_DIR": "${workspaceFolder}/build/py36dev/Lib/site-packages/scons-3.0.1",
                 // for development add in the root and scons engine directories
                 "PYTHONPATH" : "${workspaceFolder};${workspaceFolder}/build/py36dev/Lib/site-packages/scons-3.0.1",
-                // make sure we use mkdocs from the virtual environment
+                // make sure we use the virtual environment for exe's
                 "PATH" : "${workspaceFolder}/build/py36dev/Scripts"
             },
             "args": ["mkcombine"],
@@ -44,7 +44,7 @@
                 "SCONS_LIB_DIR": "${workspaceFolder}/build/py27dev/Lib/site-packages/scons-3.0.1",
                 // for development add in the root and scons engine directories
                 "PYTHONPATH" : "${workspaceFolder};${workspaceFolder}/build/py27dev/Lib/site-packages/scons-3.0.1",
-                // make sure we use mkdocs from the virtual environment
+                // make sure we use the virtual environment for exe's
                 "PATH" : "${workspaceFolder}/build/py27dev/Scripts"
             },
             "args": ["mkcombine"],

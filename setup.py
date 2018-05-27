@@ -1,4 +1,4 @@
-"""Setup file to package scons mkdocs tools"""
+"""Setup file to package scons tools"""
 
 import os
 from setuptools import setup, find_packages
@@ -26,6 +26,7 @@ except (IOError, ImportError):
     LONG_DESC = read_file('Readme.md')
 
 
+#TODO
 #from codecs import open  # To use a consistent encoding
 #from os import path
 
@@ -43,9 +44,9 @@ except (IOError, ImportError):
 
 
 setup(
-    name='scons-gbd-tools-docs',
+    name='scons-gbd-docs',
     version=VERSION,
-    description='SCons tools for generating documentation.',
+    description='Gbd SCons tools for generating documentation.',
     long_description=LONG_DESC,
     author=AUTHOR,
     author_email='garlicbready@googlemail.com',
@@ -71,7 +72,6 @@ setup(
     keywords="pip package, mkdocs, scons, pandoc",
     license=LICENSE,
     install_requires=[
-        "mkdocs>=0.16.3",
     ],
     setup_requires=[
         'pytest-runner',
@@ -84,7 +84,7 @@ setup(
     ],
     entry_points={
         'scons.plugins': [
-            'scons_gbd_docs=scons_gbd_docs.plugin:GbdDocTools',
+            'scons_gbd_docs=scons_gbd_docs.plugin:scons_gbd_docs',
         ]
     }
 )
