@@ -51,11 +51,11 @@ def MkdocsPublish(env, commitmsg, target=None, source=None):
 
 def __Publish_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
-    cmdopts = ['$Mkdocs_Exe', 'gh-deploy']
-    cmdopts.append('--config-file=' + str(source[0]))
-
     cfg = env['Mkdocs_Config']
     assert isinstance(cfg, MkdocsConfig)
+
+    cmdopts = [cfg.Exe, 'gh-deploy']
+    cmdopts.append('--config-file=' + str(source[0]))
 
     if cfg.CleanBuild:
         cmdopts.append('--clean')

@@ -1,19 +1,19 @@
 """
-    PandocBuild
-    This tool will generate the documentation output from input files
-    For example converting markdown files to a pdf
+This tool will generate the documentation output using pandoc in varying formats
+For example converting markdown files to a pdf
 """
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
 
 import SCons.Script
 from SCons.Environment import Environment
 
-from SCons.Script import *
 import os
 import sys
 import os.path as path
-from . import PandocCommon
-
-# TODO Add options / settings
+from scons_gbd_docs.Gbd.Docs.Pandoc.Common import PandocCommon
+from scons_gbd_docs.Gbd.Docs.Pandoc.Common.PandocConfig import PandocConfig
+from SCons.Script import Builder
 
 
 def exists(env):
@@ -22,39 +22,57 @@ def exists(env):
 
 
 def generate(env):
-    """Called when the tool is loaded into the environment
-       at startup of script"""
+    """Called when the tool is loaded into the environment at startup of script"""
     assert(exists(env))
-    # Available Options
-    # These override those within the yaml configuration file
-    env.SetDefault(
-        # Working directory is current directory (default)
-        Pandoc_WorkingDir=env.Dir('.'),
+    if 'Pandoc_Config' not in env:
+        env['Pandoc_Config'] = PandocConfig(env)
+    env['Pandoc_Config'].set_defaults()
 
-        # TODO additional options
-
-        # Additional Arguments
-        Pandoc_ExtraArgs=[])
-
-    # Register the builder
-    bld = Builder(action=__PandocBuild_func)
+    bld = Builder(
+        action=__Build_func,
+    )
     env.Append(BUILDERS={'PandocBuild': bld})
 
 
-def __PandocBuild_func(target, source, env):
-    """Actual builder that does the work after the Sconscript file is parsed"""
-    cmdopts = [_detect(env)]
+def __Build_func(target, source, env):
+    """Actual builder that does the work after the SConstruct file is parsed"""
+    cfg = env['Pandoc_Config']
+    assert isinstance(cfg, PandocConfig)
+
+    cmdopts = [cfg.Exe, 'build']
+
+    if cfg.StripEmptyParagraphs:
+        cmdopts.append('--strip-empty-paragraphs')
+
+    # TODO options
+    #cmdopts.append('--config-file=' + str(source[0]))
+    #if cfg.CleanBuild:
+    #    cmdopts.append('--clean')
+    #elif not cfg.CleanBuild:
+    #    cmdopts.append('--dirty')
+    #if cfg.Strict:
+    #    cmdopts.append('--strict')
+    #if cfg.Theme:
+    #    cmdopts.append('--theme=$Mkdocs_Theme')
+    #if cfg.ThemeDir:
+    #    cmdopts.append('--theme-dir=$Mkdocs_ThemeDir')
+    #if 'Mkdocs_SiteDir' in env:
+    #    cmdopts.append('--site-dir=$Mkdocs_SiteDir')
+    #if cfg.Quiet:
+    #    cmdopts.append('--quiet')
+    #if cfg.Verbose:
+    #    cmdopts.append('--verbose')
+    cmdopts = cmdopts + cfg.ExtraArgs
+
+    print('Building Pandoc Documentation:')
 
     index = 0
     for srcitem in source:
         infile = str(srcitem)
         outfile = str(target[index])
+        index = index + 1
 
-        # TODO add options
-        cmdopts = cmdopts + env['Pandoc_ExtraArgs']
-
-        cmdopts.append('--output=' + outfile)
-        cmdopts.append(infile)
-
-        print('Building Pandoc Documentation:')
-        env.Execute(env.Action([cmdopts], chdir=env['Pandoc_WorkingDir']))
+        runopts = cmdopts
+        runopts.append('--output=' + outfile)
+        runopts.append(infile)
+        env.Execute(env.Action([runopts], chdir=cfg.WorkingDir))

@@ -1,5 +1,5 @@
 """
-Configuration class for Mkdocs Combiner
+Configuration class for Mkdocs Combiner CLI options
 """
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)

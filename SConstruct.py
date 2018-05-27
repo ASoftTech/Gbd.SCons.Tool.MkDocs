@@ -10,7 +10,9 @@ AddOption('--run-tests', dest='run-tests', action='store_true',help='run the pyt
 AddOption('--setup-envs', dest='setup-envs', action='store_true',help='setup development python virtual environments', default=False)
 
 # Pull in SConscript files from sub dirs
+Default(None)
 SConscript('scons_gbd_docs/Gbd/Docs/Mkdocs/Common/SConscript.py')
+SConscript('scons_gbd_docs/Gbd/Docs/Pandoc/Common/SConscript.py')
 
 # Run tests
 if GetOption('run-tests'):

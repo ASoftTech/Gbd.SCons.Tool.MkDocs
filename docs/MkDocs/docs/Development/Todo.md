@@ -8,9 +8,6 @@
   * add coverage command to sconscript
   * https://coverage.readthedocs.io/en/coverage-4.5.1/
 
-  * mkdocs combiner is failing on python 3 due to unicode error
-  * also I think an error with passed cli options
-
 
 ## Testing
 

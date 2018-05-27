@@ -46,11 +46,11 @@ def generate(env):
 
 def __Combiner_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
-    cmdopts = ['$Mkdocs_Combine_Exe']
-    cmdopts.append('--config-file=' + str(source[0]))
-
     cfg = env['Mkdocs_CombineConfig']
     assert isinstance(cfg, MkdocsCombineConfig)
+    
+    cmdopts = [cfg.Exe]
+    cmdopts.append('--config-file=' + str(source[0]))
 
     if cfg.OutputHtml:
         cmdopts.append('--outhtml=' + str(target[0]))
@@ -67,21 +67,21 @@ def __Combiner_func(target, source, env):
     # Structure options
     if cfg.Meta:
         cmdopts.append('--meta')
-    elif not cfg.Meta:
+    elif not cfg.Meta and cfg.Meta is not None:
         cmdopts.append('--no-meta')
     if cfg.Titles:
         cmdopts.append('--titles')
-    elif not cfg.Titles:
+    elif not cfg.Titles and cfg.Titles is not None:
         cmdopts.append('--no-titles')
     if cfg.Uplevels:
         cmdopts.append('--up-levels')
-    elif not cfg.Uplevels:
+    elif not cfg.Uplevels and cfg.Uplevels is not None:
         cmdopts.append('--keep-levels')
 
     # Table options
     if cfg.PandocTables:
         cmdopts.append('--grid-tables')
-    elif not cfg.PandocTables:
+    elif not cfg.PandocTables and cfg.PandocTables is not None:
         cmdopts.append('--tables')
     if cfg.TableWidth:
         cmdopts.append('--grid-width=$Mkdocs_Combine_TableWidth')
@@ -89,17 +89,17 @@ def __Combiner_func(target, source, env):
     # Link options
     if cfg.Refs:
         cmdopts.append('--refs')
-    elif not cfg.Refs:
+    elif not cfg.Refs and cfg.Refs is not None:
         cmdopts.append('--no-refs')
     if cfg.Anchors:
         cmdopts.append('--anchors')
-    elif not cfg.Anchors:
+    elif not cfg.Anchors and cfg.Anchors is not None:
         cmdopts.append('--no-anchors')
 
     # Extra options
     if cfg.MathLatex:
         cmdopts.append('--latex')
-    elif not cfg.MathLatex:
+    elif not cfg.MathLatex and cfg.MathLatex is not None:
         cmdopts.append('--math')
     if cfg.ImageExt:
         cmdopts.append('--image-ext=$Mkdocs_Combine_ImageExt')

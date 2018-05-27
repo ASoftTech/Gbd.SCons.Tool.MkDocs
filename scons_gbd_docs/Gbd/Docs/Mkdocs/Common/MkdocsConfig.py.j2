@@ -1,5 +1,5 @@
 """
-Configuration class for Mkdocs
+Configuration class for Mkdocs CLI options
 """
 from __future__ import (division, print_function,
                         absolute_import, unicode_literals)
