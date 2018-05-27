@@ -48,7 +48,7 @@ def scanner(node, env, path, arg=None):
     # Search patterns to exclude
     excludedirs_full = []
 
-    for excludeitem in env['Mkdocs_ExcludeDirs']:
+    for excludeitem in cfg.ExcludeDirs:
         excludedirs_full.append(os.path.join(searchpath, excludeitem))
 
     depends = []
@@ -68,8 +68,8 @@ def emitter(target, source, env):
         source.append(cfgfile)
     else:
         cfgfile = source[0]
-    # Read mkdocs config
 
+    # Read mkdocs yaml file
     cfg = env['Mkdocs_Config']
     assert isinstance(cfg, MkdocsConfig)
     cfg.read_cfg(cfgfile)

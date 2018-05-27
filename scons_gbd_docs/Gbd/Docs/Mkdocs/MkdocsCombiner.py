@@ -28,6 +28,9 @@ def generate(env):
     if 'Mkdocs_CombineConfig' not in env:
         env['Mkdocs_CombineConfig'] = MkdocsCombineConfig(env)
     env['Mkdocs_CombineConfig'].set_defaults()
+    if 'Mkdocs_Config' not in env:
+        env['Mkdocs_Config'] = MkdocsConfig(env)
+    env['Mkdocs_Config'].set_defaults()
 
     scanner = env.Scanner(
         MkdocsCommon.scanner,

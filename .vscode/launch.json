@@ -15,7 +15,7 @@
         },
 
         {
-            "name": "Python 3: Run scons SConstruct file",
+            "name": "Python 3.6: Run scons SConstruct file",
             "type": "python",
             "request": "launch",
             "cwd": "${fileDirname}",
@@ -32,5 +32,23 @@
             "args": ["mkcombine"],
         },
         
+        {
+            "name": "Python 2.7: Run scons SConstruct file",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${fileDirname}",
+            // we launch scons as a wrapper to launch the SConstruct file
+            "program": "${workspaceFolder}/build/py27dev/Scripts/scons.py",
+            "env": {
+                // tell scons which set of engine / libs to use
+                "SCONS_LIB_DIR": "${workspaceFolder}/build/py27dev/Lib/site-packages/scons-3.0.1",
+                // for development add in the root and scons engine directories
+                "PYTHONPATH" : "${workspaceFolder};${workspaceFolder}/build/py27dev/Lib/site-packages/scons-3.0.1",
+                // make sure we use mkdocs from the virtual environment
+                "PATH" : "${workspaceFolder}/build/py27dev/Scripts"
+            },
+            "args": ["mkcombine"],
+        },
+
     ]
 }

@@ -31,8 +31,10 @@ def emitter(target, source, env):
         source.append(cfgfile)
     else:
         cfgfile = source[0]
-    # Read mkdocs config
-    mkcfg = MkdocsConfig(env)
+
+    # Read mkdocs yaml file
+    mkcfg = env['Mkdocs_Config']
+    assert isinstance(mkcfg, MkdocsConfig)
     mkcfg.read_cfg(cfgfile)
 
     # Default target
