@@ -23,7 +23,7 @@ theme: cyborg
 #theme: material
 
 # Overrides content within the selected theme
-theme_dir: theme
+custom_dir: theme
 
 markdown_extensions:
     - smarty

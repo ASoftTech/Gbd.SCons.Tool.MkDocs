@@ -19,7 +19,6 @@ def main():
     # TODO
     # 1. Plugin code scons side for handling the toolpath
     #    from entry_points
-    # 2. check wildcard imports e.g. SCons.Tool.Gbd.Docs
 
     # Setup environment
     EnsureSConsVersion(3, 0, 0)
@@ -61,6 +60,8 @@ def main():
 
     elif cmd == 'clean':
         tgt = env.MkdocsBuild()
+        Default(tgt)
+        tgt = env.MkdocsCombiner()
         Default(tgt)
         SetOption('clean', True)
 
