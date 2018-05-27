@@ -54,3 +54,9 @@ pytest_plugins = "tests.pytest_scons.framework.scons_qmtest"
 
 This line of code tells pytest to load the module tests.pytest_scons.framework.scons_qmtest as a pytest plugin
 
+
+## Coverage
+
+As part of the virtual environment pytest-cov is installed which uses the coverage command.
+This determines what percentage of the code is being tested by the tests so far.
+So it's a good indicator as to if more tests are needed to cover more of the existing code in the library

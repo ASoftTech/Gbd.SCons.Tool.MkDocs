@@ -48,7 +48,7 @@ def __Combiner_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
     cfg = env['Mkdocs_CombineConfig']
     assert isinstance(cfg, MkdocsCombineConfig)
-    
+
     cmdopts = [cfg.Exe]
     cmdopts.append('--config-file=' + str(source[0]))
 

@@ -2,12 +2,12 @@ import SCons.Script
 from SCons.Environment import Environment
 import os
 
-EnsureSConsVersion(3,0,0)
-env = Environment(ENV = os.environ)
+EnsureSConsVersion(3, 0, 0)
+env = Environment(ENV=os.environ)
 
-AddOption('--build-templates', dest='build-templates', action='store_true',help='regenerate code from jinja templates', default=False)
-AddOption('--run-tests', dest='run-tests', action='store_true',help='run the pytest tests', default=False)
-AddOption('--setup-envs', dest='setup-envs', action='store_true',help='setup development python virtual environments', default=False)
+AddOption('--build-templates', dest='build-templates', action='store_true', help='regenerate code from jinja templates', default=False)
+AddOption('--run-tests', dest='run-tests', action='store_true', help='run the pytest tests', default=False)
+AddOption('--setup-envs', dest='setup-envs', action='store_true', help='setup development python virtual environments', default=False)
 
 # Pull in SConscript files from sub dirs
 Default(None)
@@ -19,7 +19,3 @@ if GetOption('run-tests'):
 
 if GetOption('setup-envs'):
     env.Execute('tox -c build/tox_dev.ini')
-
-
-# todo add coverage command
-# https://coverage.readthedocs.io/en/coverage-4.5.1/

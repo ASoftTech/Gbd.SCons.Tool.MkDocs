@@ -44,7 +44,7 @@ def __Build_func(target, source, env):
     """Actual builder that does the work after the SConstruct file is parsed"""
     cfg = env['Mkdocs_Config']
     assert isinstance(cfg, MkdocsConfig)
-    
+
     cmdopts = [cfg.Exe, 'build']
     cmdopts.append('--config-file=' + str(source[0]))
 

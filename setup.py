@@ -4,7 +4,7 @@ import os
 from setuptools import setup, find_packages
 
 from scons_gbd_docs import (__version__ as VERSION, __author__ as AUTHOR,
-                                  __license__ as LICENSE)
+                            __license__ as LICENSE)
 
 
 def read_file(filename):
@@ -72,7 +72,6 @@ setup(
     license=LICENSE,
     install_requires=[
         "mkdocs>=0.16.3",
-        "mkdocs-pandoc>=0.2.6",
     ],
     setup_requires=[
         'pytest-runner',

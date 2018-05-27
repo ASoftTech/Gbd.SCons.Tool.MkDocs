@@ -137,8 +137,8 @@ class MkdocsCombineConfig:
 
     @property
     def MathLatex(self):
-        """True = combine the \( \) Markdown math into LaTeX $$ inlines.
-        False = keep \( \) Markdown math notation as is (default)."""
+        """True = combine the markdown math into LaTeX $$ inlines.
+        False = keep markdown math notation as is (default)."""
         return self.env['Mkdocs_Combine_MathLatex']
 
     @MathLatex.setter
