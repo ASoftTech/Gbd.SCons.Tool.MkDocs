@@ -11,8 +11,7 @@ AddOption('--setup-envs', dest='setup-envs', action='store_true',help='setup dev
 
 # Pull in SConscript files from sub dirs
 Default(None)
-SConscript('scons_gbd_docs/Gbd/Docs/Mkdocs/Common/SConscript.py')
-SConscript('scons_gbd_docs/Gbd/Docs/Pandoc/Common/SConscript.py')
+SConscript('scons_gbd_docs/Gbd/Docs/SConscript.py')
 
 # Run tests
 if GetOption('run-tests'):

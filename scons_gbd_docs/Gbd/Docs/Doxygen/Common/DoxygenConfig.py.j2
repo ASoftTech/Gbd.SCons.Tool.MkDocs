@@ -1,0 +1,53 @@
+"""
+Configuration class for Doxygen CLI options
+"""
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
+
+import SCons.Script
+from SCons.Environment import Environment
+
+
+class DoxygenConfig:
+
+    def __init__(self, env):
+        self.env = env
+
+{# All Passthrough properties #}
+{% set envprefix = "Doxygen_" %}
+{% set propertylist = [
+    ("Exe", "'doxygen'", "Represents the doxygen executable."),
+    ("WorkingDir", "self.env.Dir('.')",  "Working directory (current directory by default)."),
+    ("ExtraArgs", "[]", "Additional Arguments."),
+] -%}
+
+{# Generate all pass through properties with no special logic #}
+{% for item in propertylist %}
+    {% if item|length == 3 %}
+    @property
+    def {{ item[0] }}(self):
+        """{{ item[2] }}"""
+        return self.env['{{ envprefix + item[0] }}']
+
+    @{{ item[0] }}.setter
+    def {{ item[0] }}(self, value):
+        self.env['{{ envprefix + item[0] }}'] = value
+
+    {% else %}
+    {{ item }}
+
+    {% endif %}
+{% endfor %}
+    def set_defaults(self):
+        """Set the default options"""
+        self.env.SetDefault(
+        {# Set default values #}
+        {% for item in propertylist %}
+            {% if item|length == 3 %}
+            {{ envprefix + item[0] }}={{ item[1] }},
+            {% else %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+        )
+

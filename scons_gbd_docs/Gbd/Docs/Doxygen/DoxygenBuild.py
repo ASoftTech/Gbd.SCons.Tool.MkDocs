@@ -26,15 +26,18 @@
 
 # The original version was tested with doxygen 1.4.6
 
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
+
+import SCons.Script
+from SCons.Environment import Environment
+
 import os
 import sys
 import os.path as path
-import SCons.Script
-from SCons.Environment import Environment
+from scons_gbd_docs.Gbd.Docs.Doxygen.Common import DoxygenCommon
+from scons_gbd_docs.Gbd.Docs.Doxygen.Common.DoxygenConfig import DoxygenConfig
 from SCons.Script import Builder
-
-# TODO fix relative imports when importing a single namespaced tool
-from scons_gbd_docs.Gbd.Docs.Doxygen import DoxygenCommon
 
 
 def exists(env):
@@ -43,27 +46,34 @@ def exists(env):
 
 
 def generate(env):
-    """Called when the tool is loaded into the environment
-       at startup of script"""
+    """Called when the tool is loaded into the environment at startup of script"""
     assert(exists(env))
-    DoxygenCommon.setup_opts(env)
-    doxyfile_scanner = env.Scanner(
-        DoxygenCommon.DoxySourceScan,
-        "DoxySourceScan",
-        scan_check=DoxygenCommon.DoxySourceScanCheck)
+    if 'Doxygen_Config' not in env:
+        env['Doxygen_Config'] = DoxygenConfig(env)
+    env['Doxygen_Config'].set_defaults()
+
+    scanner = env.Scanner(
+        DoxygenCommon.scanner,
+        name="DoxygenScanner",
+        scan_check=DoxygenCommon.scanner_check
+    )
     bld = Builder(
-        action=__Doxygen_func,
-        emitter=DoxygenCommon.DoxyEmitter,
-        target_factory=env.fs.Entry,
-        source_scanner=doxyfile_scanner)
-    env.Append(BUILDERS={'Doxygen': bld})
+        action=__Build_func,
+        emitter=MkdocsCommon.emmiter,
+        source_scanner=scanner,
+        target_factory=env.fs.Entry
+    )
+    env.Append(BUILDERS={'DoxygenBuild': bld})
 
 
-def __Doxygen_func(target, source, env):
+def __Build_func(target, source, env):
     """Actual builder that does the work after the Sconscript file is parsed"""
-    cmdopts = ['$Doxygen']
-    cmdopts.append(str(source[0]))
-    cmdopts = cmdopts + env['Doxygen_ExtraArgs']
+    cfg = env['Doxygen_Config']
+    assert isinstance(cfg, DoxygenConfig)
 
-    print('Building Doxygen html:')
-    env.Execute(env.Action([cmdopts], chdir=env['Doxygen_WorkingDir']))
+    cmdopts = [cfg.Exe]
+    cmdopts.append(str(source[0]))
+    cmdopts = cmdopts + cfg.ExtraArgs
+
+    print('Building Doxygen:')
+    env.Execute(env.Action([cmdopts], chdir=cfg.WorkingDir))

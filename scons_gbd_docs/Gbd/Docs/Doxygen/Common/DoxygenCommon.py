@@ -34,46 +34,32 @@ output_formats = {
 def detect(env):
     """Detect if doxygen exe is detected on the system
        or use user specified option"""
-    if 'Doxygen' in env:
-        return env.Detect(env['Doxygen'])
+    if 'Doxygen_Exe' in env:
+        ret = env.Detect(env['Doxygen_Exe'])
     else:
-        return env.Detect('doxygen')
+        ret = env.Detect('doxygen')
+    if ret is None:
+        print("doxygen not found")
+    return ret
 
 
-def setup_opts(env):
-    """Common setup of options for Mkdocs builders"""
-    # Available Options
-    # These override those within the yaml configuration file
-    env.SetDefault(
-        # Default exe to launch
-        Doxygen='doxygen',
-        # Working directory is current directory (default)
-        Doxygen_WorkingDir=env.Dir('.'),
-        # Additional Arguments
-        Doxygen_ExtraArgs=[])
-
-# Scanner related - modification of sources
-
-
-def DoxySourceScan(node, env, path):
+def scanner(node, env, path):
     """
     Doxygen Doxyfile source scanner.  This should scan the Doxygen file and add
     any files used to generate docs to the list of source files.
     """
-    filepaths = DoxySourceFiles(node, env)
+    filepaths = doxygen_source_files(node, env)
     sources = map(lambda path: env.File(path), filepaths)
     return sources
 
 
-def DoxySourceScanCheck(node, env):
+def scanner_check(node, env):
     """Check if we should scan this file"""
     return path.isfile(node.path)
 
 
-# Emiiter related - modification of targets
-
-def DoxyEmitter(target, source, env):
-    """Doxygen Doxyfile emitter"""
+def emmiter(target, source, env):
+    """Doxygen Doxyfile emitter, modification of scons targets"""
     # Choose Doxyfile as source file if not specified
     if not source:
         doxyfilenode = File('Doxyfile')
@@ -83,7 +69,7 @@ def DoxyEmitter(target, source, env):
 
     doxy_fpath = str(doxyfilenode)
     conf_dir = path.dirname(doxy_fpath)
-    data = DoxyfileParse(doxyfilenode.get_contents(), conf_dir)
+    data = doxygen_file_parse(doxyfilenode.get_contents(), conf_dir)
 
     targets = []
     out_dir = data.get("OUTPUT_DIRECTORY", ".")
@@ -104,7 +90,7 @@ def DoxyEmitter(target, source, env):
                 # Can we convert it to an int?
                 try:
                     e = int(manext)
-                except:
+                except Exception:
                     # No, so set back to default
                     manext = "3"
 
@@ -135,7 +121,7 @@ def DoxyEmitter(target, source, env):
                 # We have to add a target file docs/man/man3/foo.h.3
                 # for each input file foo.h, so we scan the config file
                 # a second time... :(
-                filepaths = DoxySourceFiles(doxyfilenode, env)
+                filepaths = doxygen_source_files(doxyfilenode, env)
                 for f in filepaths:
                     if path.isfile(f) and f != doxy_fpath:
                         of = env.File(path.join(out_dir,
@@ -160,7 +146,7 @@ def DoxyEmitter(target, source, env):
 # Common between emmiter / scanners
 
 
-def DoxySourceFiles(node, env):
+def doxygen_source_files(node, env):
     """
     Scan the given node's contents (a Doxygen file) and add
     any files used to generate docs to the list of source files.
@@ -184,7 +170,7 @@ def DoxySourceFiles(node, env):
     # go onto the sources list
     conf_dir = path.dirname(str(node))
 
-    data = DoxyfileParse(node.get_contents(), conf_dir)
+    data = doxygen_file_parse(node.get_contents(), conf_dir)
 
     if data.get("RECURSIVE", "NO") == "YES":
         recursive = True
@@ -259,7 +245,7 @@ def DoxySourceFiles(node, env):
     return sources
 
 
-def DoxyfileParse(file_contents, conf_dir, data=None):
+def doxygen_file_parse(file_contents, conf_dir, data=None):
     """
     Parse a Doxygen source file and return a dictionary of all the values.
     Values will be strings and lists of strings.
@@ -318,11 +304,10 @@ def DoxyfileParse(file_contents, conf_dir, data=None):
                 if not path.isabs(nextfile):
                     nextfile = path.join(conf_dir, nextfile)
                 if nextfile in data[key]:
-                    raise Exception("recursive @INCLUDE in Doxygen config: " +
-                                    nextfile)
+                    raise Exception("recursive @INCLUDE in Doxygen config: " + nextfile)
                 data[key].append(nextfile)
                 fh = open(nextfile, 'r')
-                DoxyfileParse(fh.read(), conf_dir, data)
+                doxygen_file_parse(fh.read(), conf_dir, data)
                 fh.close()
             else:
                 append_data(data, key, new_data, token)

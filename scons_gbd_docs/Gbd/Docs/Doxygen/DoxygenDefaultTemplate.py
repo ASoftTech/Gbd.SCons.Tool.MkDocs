@@ -1,17 +1,19 @@
 """
-DoxygenDefaultTemplate
-  This tool will generate default template files for doxygen
+This tool will generate default template files for doxygen
 """
+
+from __future__ import (division, print_function,
+                        absolute_import, unicode_literals)
+
+import SCons.Script
+from SCons.Environment import Environment
 
 import os
 import sys
 import os.path as path
-import SCons.Script
-from SCons.Environment import Environment
+from scons_gbd_docs.Gbd.Docs.Doxygen.Common import DoxygenCommon
+from scons_gbd_docs.Gbd.Docs.Doxygen.Common.DoxygenConfig import DoxygenConfig
 from SCons.Script import Builder
-
-# TODO fix relative imports when importing a single namespaced tool
-from scons_gbd_docs.Gbd.Docs.Doxygen import DoxygenCommon
 
 
 def exists(env):
@@ -20,29 +22,33 @@ def exists(env):
 
 
 def generate(env):
-    """Called when the tool is loaded into the environment
-       at startup of script"""
+    """Called when the tool is loaded into the environment at startup of script"""
     assert(exists(env))
-    DoxygenCommon.setup_opts(env)
+    if 'Doxygen_Config' not in env:
+        env['Doxygen_Config'] = DoxygenConfig(env)
+    env['Doxygen_Config'].set_defaults()
 
-    doxyfile_scanner = env.Scanner(
-        DoxygenCommon.DoxySourceScan,
-        "DoxySourceScan",
-        scan_check=DoxygenCommon.DoxySourceScanCheck,
+    scanner = env.Scanner(
+        DoxygenCommon.scanner,
+        name="DoxygenScanner",
+        scan_check=DoxygenCommon.scanner_check
     )
-
     bld = Builder(
-        action=__DoxygenDefaultTemplate_func,
-        emitter=DoxygenCommon.DoxyEmitter,
-        target_factory=env.fs.Entry,
+        action=__Build_func,
+        emitter=MkdocsCommon.emmiter,
+        source_scanner=scanner,
+        target_factory=env.fs.Entry
         single_source=True,
-        source_scanner=doxyfile_scanner)
+    )
     env.Append(BUILDERS={'DoxygenDefaultTemplate': bld})
 
 
-def __DoxygenDefaultTemplate_func(target, source, env):
+def __Build_func(target, source, env):
     """Actual builder that does the work after the Sconscript file is parsed"""
-    cmdopts = ['$Doxygen']
+    cfg = env['Doxygen_Config']
+    assert isinstance(cfg, DoxygenConfig)
+
+    cmdopts = [cfg.Exe]
     cmdopts += ["-w", "html"]
 
     # TODO targets
@@ -51,7 +57,7 @@ def __DoxygenDefaultTemplate_func(target, source, env):
                 "theme/default/customdoxygen.css"]
 
     cmdopts.append(str(source[0]))
-    cmdopts = cmdopts + env['Doxygen_ExtraArgs']
+    cmdopts = cmdopts + cfg.ExtraArgs
 
     print('Building Doxygen default templates:')
-    env.Execute(env.Action([cmdopts], chdir=env['Doxygen_WorkingDir']))
+    env.Execute(env.Action([cmdopts], chdir=cfg.WorkingDir))
