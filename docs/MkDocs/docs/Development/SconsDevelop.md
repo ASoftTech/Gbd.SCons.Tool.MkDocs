@@ -56,10 +56,5 @@ Next to install scons via pip into the virtual env
 Make sure to enter into the virtual env, and that your inside the build/scons directory
 then run the following
 ```
-pip install --egg build\scons
+pip install build\scons
 ```
-
-TODO
-This might fix the issue with the --egg option
-
-  * https://bitbucket.org/bdbaddog/scons/commits/c89c850e906fa0e2cc2bd70c5bf4dabfe4241e8d?at=default
