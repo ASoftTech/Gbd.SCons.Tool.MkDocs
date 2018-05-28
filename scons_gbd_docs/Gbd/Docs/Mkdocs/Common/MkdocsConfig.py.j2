@@ -24,7 +24,7 @@ class MkdocsConfig:
     ("CleanBuild", "None", "If to Remove old files from the site_dir before building (the default)."),
     ("Strict", "False", "If to enable Strict mode."),
     ("Theme", "None", "Which theme to use."),
-    ("ThemeDir", "None", "Directory of additional files to merge in with the theme."),
+    ("CustomDir", "None", "Directory of additional files to merge in with the theme."),
     ("RemoteBranch", "None", "If to override the default remote branch setting when uploading."),
     ("RemoteName", "None", "If to override the default remote name setting when uploading."),
     ("ForcePush", "False", "If to force the push to github."),
@@ -59,7 +59,7 @@ class MkdocsConfig:
     @property
     def SiteDir(self):
         """Directory to output the build to - default is 'site'."""
-        if 'Mkdocs_SiteDir' in self.env:
+        if self.env['Mkdocs_SiteDir'] is not None:
             return self.env.Dir(self.env['Mkdocs_SiteDir'])
         elif 'site_dir' in self.yamlcfg:
             return self.env.Dir(self.yamlcfg['site_dir'])
@@ -96,5 +96,6 @@ class MkdocsConfig:
             {{ item }}
             {% endif %}
         {% endfor %}
+            Mkdocs_SiteDir=None,
         )
 

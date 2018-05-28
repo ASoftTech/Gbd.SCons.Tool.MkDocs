@@ -62,13 +62,13 @@ class MkdocsConfig:
         self.env['Mkdocs_Theme'] = value
 
     @property
-    def ThemeDir(self):
+    def CustomDir(self):
         """Directory of additional files to merge in with the theme."""
-        return self.env['Mkdocs_ThemeDir']
+        return self.env['Mkdocs_CustomDir']
 
-    @ThemeDir.setter
-    def ThemeDir(self, value):
-        self.env['Mkdocs_ThemeDir'] = value
+    @CustomDir.setter
+    def CustomDir(self, value):
+        self.env['Mkdocs_CustomDir'] = value
 
     @property
     def RemoteBranch(self):
@@ -165,7 +165,7 @@ class MkdocsConfig:
     @property
     def SiteDir(self):
         """Directory to output the build to - default is 'site'."""
-        if 'Mkdocs_SiteDir' in self.env:
+        if self.env['Mkdocs_SiteDir'] is not None:
             return self.env.Dir(self.env['Mkdocs_SiteDir'])
         elif 'site_dir' in self.yamlcfg:
             return self.env.Dir(self.yamlcfg['site_dir'])
@@ -199,7 +199,7 @@ class MkdocsConfig:
             Mkdocs_CleanBuild=None,
             Mkdocs_Strict=False,
             Mkdocs_Theme=None,
-            Mkdocs_ThemeDir=None,
+            Mkdocs_CustomDir=None,
             Mkdocs_RemoteBranch=None,
             Mkdocs_RemoteName=None,
             Mkdocs_ForcePush=False,
@@ -210,4 +210,5 @@ class MkdocsConfig:
             Mkdocs_Verbose=False,
             Mkdocs_ExcludeDirs=[],
             Mkdocs_ExtraArgs=[],
+            Mkdocs_SiteDir=None,
         )

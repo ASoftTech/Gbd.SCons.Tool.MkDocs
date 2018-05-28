@@ -54,10 +54,6 @@ def __Build_func(target, source, env):
     #    cmdopts.append('--strict')
     #if cfg.Theme:
     #    cmdopts.append('--theme=$Mkdocs_Theme')
-    #if cfg.ThemeDir:
-    #    cmdopts.append('--theme-dir=$Mkdocs_ThemeDir')
-    #if 'Mkdocs_SiteDir' in env:
-    #    cmdopts.append('--site-dir=$Mkdocs_SiteDir')
     #if cfg.Quiet:
     #    cmdopts.append('--quiet')
     #if cfg.Verbose:

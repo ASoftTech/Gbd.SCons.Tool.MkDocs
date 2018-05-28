@@ -129,7 +129,7 @@ def setup_opts(env):
     #env.Replace(Mkdocs_WorkingDir = env.Dir("."))
     #env.Replace(Mkdocs_ServeUrl = "127.0.0.1:8001")
     #env.Replace(Mkdocs_Strict = True)
-    #env.Replace(Mkdocs_ThemeDir = Dir("theme"))
+    #env.Replace(Mkdocs_CustomDir = Dir("theme"))
     #env.Replace(Mkdocs_DirtyReload = True)
     #env.Replace(Mkdocs_SiteDir = "site2")
     #env.Replace(Mkdocs_ExtraArgs = ["--verbose"])

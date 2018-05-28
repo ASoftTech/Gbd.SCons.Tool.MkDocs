@@ -9,11 +9,20 @@ pages:
 
 - Builders:
     - Mkdocs:
+        - MkDocs Config: Builders\Mkdocs\MkdocsConfig.md
         - MkDocs Builder: Builders\Mkdocs\MkdocsBuild.md
-        - MkDocs Combiner: Builders\Mkdocs\MkdocsCombiner.md
-        - MkDocs Json Builder: Builders\Mkdocs\MkdocsJsonbuild.md
-        - MkDocs Publish: Builders\Mkdocs\MkdocsPublish.md
-        - MkDocs Server: Builders\Mkdocs\MkdocsServer.md
+#        - MkDocs Publish: Builders\Mkdocs\MkdocsPublish.md
+#        - MkDocs Server: Builders\Mkdocs\MkdocsServer.md
+#        - MkDocs Combiner: Builders\Mkdocs\MkdocsCombiner.md
+- Development:
+    - Overall Setup: Development\Setup.md
+    - Python Environments: Development\VirtualEnv.md
+    - Testing: Development\Testing.md
+    - Jinja Templates: Development\Templates.md
+    - Using devel Scons: Development\SconsDevelop.md
+    - Todo: Development\Todo.md
+#    - Plugin: Development\Plugin.md
+
 
 #theme: cosmo
 theme: cyborg

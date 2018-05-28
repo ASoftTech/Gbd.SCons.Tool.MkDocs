@@ -56,8 +56,8 @@ def __Server_func(target, source, env):
         cmdopts.append('--strict')
     if cfg.Theme:
         cmdopts.append('--theme=$Mkdocs_Theme')
-    if cfg.ThemeDir:
-        cmdopts.append('--theme-dir=$Mkdocs_ThemeDir')
+    if cfg.CustomDir:
+        cmdopts.append('--theme-dir=$Mkdocs_CustomDir')
     if cfg.LiveReload:
         cmdopts.append('--livereload')
     elif not cfg.LiveReload:
